@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Failure 👾</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --violet: #b8a1f5;
+    --violet-dark: #8f6fe6;
+    --navy: #1b1340;
+    --lavender: #f1ebff;
+    --lavender-2: #e2d8fb;
+    --mint: #7ef0c2;
+    --cyan: #6fd8f5;
+    --pink: #f59ad0;
+    --yellow: #f7d86a;
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0; padding:0; height:100%;
+    font-family: 'Courier New', monospace;
+  }
+
+  body{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: var(--lavender);
+    overflow:hidden;
+    position:relative;
+  }
+
+  .emoji{
+    font-family: 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;
+  }
+
+  .page{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+  }
+  .page.active{ display:flex; }
+
+  /* ============ PAGE 1 : ERROR ============ */
+  #page-error{
+    background:
+      radial-gradient(circle at 12% 18%, rgba(126,240,194,0.28), transparent 38%),
+      radial-gradient(circle at 88% 84%, rgba(184,161,245,0.40), transparent 42%),
+      var(--lavender);
+  }
+
+  .dialog{
+    width: min(90vw, 500px);
+    border: 3px solid var(--navy);
+    border-radius: 14px;
+    background: var(--lavender);
+    box-shadow: 10px 10px 0 var(--navy);
+    overflow:hidden;
+    animation: pop-in 0.4s cubic-bezier(.2,.9,.25,1.2) both;
+  }
+
+  @keyframes pop-in{
+    from{ opacity:0; transform: scale(0.92) translateY(10px); }
+    to{ opacity:1; transform: scale(1) translateY(0); }
+  }
+
+  .titlebar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background: var(--violet);
+    border-bottom: 3px solid var(--navy);
+    padding: 14px 20px;
+  }
+  .titlebar span{
+    font-weight:700;
+    font-size: clamp(16px, 4vw, 22px);
+    letter-spacing: 0.05em;
+    color: var(--navy);
+  }
+  .titlebar .x{ font-size: 22px; line-height:1; }
+
+  .dialog-body{
+    padding: 34px 30px 30px;
+    display:flex;
+    gap: 20px;
+    align-items:flex-start;
+  }
+
+  .icon-circle{
+    flex-shrink:0;
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--violet);
+    border: 3px solid var(--navy);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 32px;
+    line-height:1;
+    animation: bob 1.8s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{ transform: translateY(0); }
+    50%{ transform: translateY(-4px); }
+  }
+
+  .msg h1{
+    margin: 0 0 22px;
+    font-size: clamp(17px, 4.4vw, 22px);
+    color: var(--navy);
+    line-height:1.45;
+    font-weight:700;
+  }
+
+  .btn-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 12px;
+  }
+
+  .btn{
+    font-family: inherit;
+    font-weight:700;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--lavender-2);
+    border: 3px solid var(--navy);
+    border-radius: 30px;
+    padding: 11px 22px;
+    cursor:pointer;
+    box-shadow: 4px 4px 0 var(--navy);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  .btn:hover, .btn:focus-visible{
+    transform: translate(-2px,-2px);
+    box-shadow: 6px 6px 0 var(--navy);
+    outline:none;
+  }
+  .btn:active{
+    transform: translate(1px,1px);
+    box-shadow: 2px 2px 0 var(--navy);
+  }
+  .btn.primary{ background: var(--violet); }
+
+  /* ============ PAGE 2 : CARD ============ */
+  #page-card{
+    background:
+      radial-gradient(circle at 15% 20%, rgba(126,240,194,0.22), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(184,161,245,0.35), transparent 45%),
+      var(--lavender);
+  }
+
+  .card-outer{
+    width: min(90vw, 620px);
+    padding: 20px;
+    background: #faf7ff;
+    border: 1px solid rgba(27,19,64,0.08);
+    border-radius: 22px;
+    box-shadow: 0 20px 60px rgba(27,19,64,0.15);
+    position:relative;
+    animation: pop-in 0.5s cubic-bezier(.2,.9,.25,1.2) both;
+  }
+
+  .deco-dot{
+    position:absolute;
+    border-radius:50%;
+  }
+
+  .card-inner{
+    position:relative;
+    border: 1px solid rgba(27,19,64,0.14);
+    border-radius: 16px;
+    padding: clamp(28px, 6vw, 56px) clamp(22px, 6vw, 50px);
+    min-height: min(70vh, 480px);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    text-align:center;
+    overflow:hidden;
+  }
+
+  .badge{
+    position:absolute;
+    top: 22px;
+    right: 22px;
+    width: 68px;
+    height: 68px;
+    border: 1.5px dashed var(--violet-dark);
+    border-radius: 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight:600;
+    font-size: 20px;
+    color: var(--navy);
+    background: rgba(184,161,245,0.18);
+  }
+
+  .tri{
+    position:absolute;
+    width:0; height:0;
+    border-style: solid;
+  }
+
+  .headline{
+    font-family: 'Be Vietnam Pro', 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji', sans-serif;
+    font-weight: 700;
+    font-size: clamp(18px, 4vw, 26px);
+    color: var(--navy);
+    margin: 0 0 16px;
+  }
+
+  .rule{
+    width: 46px;
+    height: 2px;
+    background: var(--violet-dark);
+    margin: 0 auto 22px;
+  }
+
+  .message{
+    font-family: 'Be Vietnam Pro', 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji', sans-serif;
+    font-size: clamp(14px, 2.4vw, 17px);
+    line-height: 1.9;
+    color: var(--navy);
+    max-width: 46ch;
+    margin: 0 auto;
+    white-space: pre-line;
+  }
+
+  .again{
+    margin-top: 24px;
+    text-align:center;
+  }
+  .again button{
+    font-family: inherit;
+    font-size: 12px;
+    color: var(--violet-dark);
+    background: none;
+    border: none;
+    text-decoration: underline;
+    cursor:pointer;
+    opacity: 0.75;
+  }
+  .again button:hover{ opacity: 1; }
+
+  /* Confetti */
+  .confetti-layer{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index: 5;
+  }
+  .confetti-piece{
+    position:absolute;
+    top: -20px;
+    opacity: 0.9;
+    animation: fall linear infinite;
+  }
+  @keyframes fall{
+    0%{ transform: translate(0,0) rotate(0deg); }
+    100%{ transform: translate(var(--drift), 110vh) rotate(360deg); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .confetti-piece{ animation: none; display:none; }
+    .dialog, .card-outer, .icon-circle{ animation: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- PAGE 1: ERROR -->
+  <div class="page active" id="page-error">
+    <div class="dialog">
+      <div class="titlebar">
+        <span>SYSTEM FAILURE</span>
+        <span class="x">&times;</span>
+      </div>
+      <div class="dialog-body">
+        <div class="icon-circle emoji">👾</div>
+        <div class="msg">
+          <h1><span class="emoji">👾</span> An error has occurred.<br>Please choose the following options:</h1>
+          <div class="btn-row">
+            <button class="btn primary" onclick="showCard()">Continue</button>
+            <button class="btn" onclick="showCard()">hả :)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: CARD -->
+  <div class="page" id="page-card">
+    <div class="confetti-layer" id="confetti-card"></div>
+
+    <div class="card-outer">
+      <div class="deco-dot" style="width:9px; height:9px; background:var(--mint); top:14px; left:60px;"></div>
+      <div class="deco-dot" style="width:11px; height:11px; background:var(--violet-dark); top:6px; left:44%;"></div>
+      <div class="deco-dot" style="width:8px; height:8px; background:var(--pink); top:44%; left:14px;"></div>
+
+      <div class="card-inner">
+        <div class="badge">20</div>
+
+        <div class="tri" style="border-width:0 0 12px 16px; border-color:transparent transparent var(--violet-dark) transparent; top:44px; left:52px; transform:rotate(-15deg);"></div>
+        <div class="tri" style="border-width:0 0 10px 13px; border-color:transparent transparent var(--mint) transparent; top:96px; left:24px; transform:rotate(-15deg);"></div>
+
+        <h1 class="headline">CMSN MICHU 🌝</h1>
+        <div class="rule"></div>
+        <p class="message">20 Tuổi trẻ khoẻ vui vẻ mong muốn đều như ý! Chúc michu luôn làm tốt các công việc sắp tới nhe 😍💐
+Có bận rộn thì cũng nhớ giữ sức khoẻ, ăn uống đầy đủ, nghỉ ngơi đủ hehe 🌸</p>
+      </div>
+
+      <div class="again">
+        <button onclick="showError()">&larr; back to error screen</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function showCard(){
+    document.getElementById('page-error').classList.remove('active');
+    document.getElementById('page-card').classList.add('active');
+    launchConfetti('confetti-card');
+  }
+  function showError(){
+    document.getElementById('page-card').classList.remove('active');
+    document.getElementById('page-error').classList.add('active');
+    document.getElementById('confetti-card').innerHTML = '';
+  }
+
+  function launchConfetti(layerId){
+    const layer = document.getElementById(layerId);
+    layer.innerHTML = '';
+    const colors = ['#b8a1f5', '#8f6fe6', '#7ef0c2', '#6fd8f5', '#f59ad0', '#f7d86a'];
+    const shapes = ['circle', 'square'];
+    const count = 55;
+
+    for(let i = 0; i < count; i++){
+      const el = document.createElement('div');
+      el.className = 'confetti-piece';
+      const size = 5 + Math.random() * 7;
+      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const left = Math.random() * 100;
+      const drift = (Math.random() * 120 - 60) + 'px';
+      const duration = 6 + Math.random() * 6;
+      const delay = Math.random() * 6;
+
+      el.style.left = left + 'vw';
+      el.style.width = size + 'px';
+      el.style.height = size + 'px';
+      el.style.background = color;
+      el.style.borderRadius = shape === 'circle' ? '50%' : '2px';
+      el.style.setProperty('--drift', drift);
+      el.style.animationDuration = duration + 's';
+      el.style.animationDelay = '-' + delay + 's';
+
+      layer.appendChild(el);
+    }
+  }
+</script>
+
+</body>
+</html>
